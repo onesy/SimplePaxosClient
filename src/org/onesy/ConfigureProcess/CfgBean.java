@@ -15,14 +15,17 @@ public class CfgBean {
 	public int db = 0;
 
 	public String password = null;
+	
+	public int timeout = 0;
 
 	private CfgBean(String host, String port, String pubchannel,
-			String subchannel, String db, String password) {
+			String subchannel, String db, String password,String timeout) {
 		this.host = host;
 		this.port = Integer.parseInt(port);
 		this.pubchannel = pubchannel;
 		this.subchannel = subchannel;
 		this.db = Integer.parseInt(db);
+		this.timeout = Integer.parseInt(timeout);
 	}
 
 	public static CfgBean getInstance(Properties properties) {
@@ -31,7 +34,8 @@ public class CfgBean {
 				&& properties.containsKey("pubchannel")
 				&& properties.containsKey("subchannel")
 				&& properties.containsKey("db")
-				&& properties.containsKey("password"))) {
+				&& properties.containsKey("password")
+				&& properties.containsKey("timeout"))) {
 			return null;
 		}
 
@@ -40,7 +44,8 @@ public class CfgBean {
 				properties.getProperty("pubchannel"),
 				properties.getProperty("subchannel"),
 				properties.getProperty("db"),
-				properties.getProperty("password"));
+				properties.getProperty("password"),
+				properties.getProperty("timeout"));
 	}
 
 }
