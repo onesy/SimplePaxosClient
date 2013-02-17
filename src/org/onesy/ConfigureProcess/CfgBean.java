@@ -27,11 +27,11 @@ public class CfgBean {
 
 	public static CfgBean getInstance(Properties properties) {
 
-		if (!properties.containsKey("host") && properties.containsKey("port")
+		if (!(properties.containsKey("host") && properties.containsKey("port")
 				&& properties.containsKey("pubchannel")
 				&& properties.containsKey("subchannel")
 				&& properties.containsKey("db")
-				&& properties.containsKey("password")) {
+				&& properties.containsKey("password"))) {
 			return null;
 		}
 
