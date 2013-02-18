@@ -1,5 +1,8 @@
 package org.onesy.Communication;
 
+import org.onesy.MsgProcessor.MsgAsile;
+import org.onesy.MsgProcessor.MsgBean;
+
 import redis.clients.jedis.JedisPubSub;
 
 public class Subscripter extends JedisPubSub {
@@ -7,7 +10,7 @@ public class Subscripter extends JedisPubSub {
 	@Override
 	public void onMessage(String Channel, String Msg) {
 		// TODO Auto-generated method stub
-		
+		MsgAsile.addReceivedBean(MsgBean.getMsgBean(Msg));
 	}
 
 	@Override

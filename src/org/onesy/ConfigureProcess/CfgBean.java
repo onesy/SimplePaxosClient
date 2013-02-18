@@ -2,6 +2,8 @@ package org.onesy.ConfigureProcess;
 
 import java.util.Properties;
 
+import org.onesy.NodesManage.NodeDictionary;
+
 public class CfgBean {
 
 	public String host = null;
@@ -17,6 +19,9 @@ public class CfgBean {
 	public String password = null;
 	
 	public int timeout = 0;
+	
+	//host_port_pubchannel_subchannel_db
+	public String sign = null;
 
 	private CfgBean(String host, String port, String pubchannel,
 			String subchannel, String db, String password,String timeout) {
@@ -26,6 +31,8 @@ public class CfgBean {
 		this.subchannel = subchannel;
 		this.db = Integer.parseInt(db);
 		this.timeout = Integer.parseInt(timeout);
+		this.sign = host + "_" + port + "_" + pubchannel + "_" + subchannel + "_" + db ;
+		NodeDictionary.NodesDictionary.put(sign, this);
 	}
 
 	public static CfgBean getInstance(Properties properties) {

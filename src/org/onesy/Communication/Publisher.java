@@ -21,7 +21,6 @@ public class Publisher {
 			e.printStackTrace();
 			return false;
 		}
-
 		return true;
 	}
 
