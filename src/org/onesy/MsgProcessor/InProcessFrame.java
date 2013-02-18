@@ -1,7 +1,11 @@
 package org.onesy.MsgProcessor;
 
 import org.onesy.ConfigureProcess.CfgBean;
-
+/**
+ * 处理中的事务的窗口，未完成，差不多完成了
+ * @author onesy
+ *
+ */
 public class InProcessFrame {
 	/**
 	 * 事件栈帧标识符
