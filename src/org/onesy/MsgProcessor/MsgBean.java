@@ -3,6 +3,7 @@ package org.onesy.MsgProcessor;
 import java.io.Serializable;
 
 import org.onesy.ConfigureProcess.CfgBean;
+import org.onesy.ConfigureProcess.CfgCenter;
 import org.onesy.NodesManage.NodeDictionary;
 
 public class MsgBean implements Serializable {
@@ -12,7 +13,14 @@ public class MsgBean implements Serializable {
 	 */
 	private static final long serialVersionUID = 400827963463881022L;
 
-	public Long voteSerialNo = 0l;
+	/**
+	 * 针对冲突解决的序列号，越小，优先级越高
+	 */
+	public Long VoteSerialNo = 0l;
+	/**
+	 * 针对处理事件跟踪的序列号，在一个事物被处理的过程中，该序列号不变，但是不同事物之间呈自增.
+	 */
+	public Long TransactionSerialNo = 0l;
 	
 	//host_port_pubchannel_subchannel_db
 	//for locate the cfgbean in nodeDictionary
@@ -27,12 +35,12 @@ public class MsgBean implements Serializable {
 	public MsgBean(CfgBean cfgBean, long voteSerialNo, String msgkind ,String msg){
 		this.sign = cfgBean.host + "_" + cfgBean.port + "_" + cfgBean.pubchannel + "_" + cfgBean.subchannel +"_" + cfgBean.db;
 		this.Msg = msg;
-		this.voteSerialNo = voteSerialNo + 1;
+		this.VoteSerialNo = voteSerialNo + 1;
 		this.msgKind = msgkind;
 	}
 	
 	public MsgBean(String voteSerialNo, String sign, String msgKind, String Msg){
-		this.voteSerialNo = Long.parseLong(voteSerialNo);
+		this.VoteSerialNo = Long.parseLong(voteSerialNo);
 		this.sign = sign;
 		this.Msg = Msg;
 	}
@@ -43,7 +51,7 @@ public class MsgBean implements Serializable {
 	
 	public static MsgBean getMsgBean(String receivedMsg){
 		
-		String[] beansInfo = receivedMsg.split(":");
+		String[] beansInfo = receivedMsg.split(CfgCenter.SEPERATOR);
 		
 		return new MsgBean(beansInfo[0], beansInfo[1],beansInfo[2], beansInfo[3]);
 	}

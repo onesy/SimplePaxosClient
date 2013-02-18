@@ -10,6 +10,15 @@ import java.util.Map;
 import java.util.Properties;
 
 public class CfgCenter {
+	
+	/**
+	 * 栈帧过期时间，500毫秒，不可以更改
+	 */
+	public static final long FRAME_TIME_OUT = 500;
+	/**
+	 * 分割符 \r\r\n\n
+	 */
+	public static final String SEPERATOR = "\r\r\n\n";
 
 	private static CfgCenter cfgCenter = null;
 
