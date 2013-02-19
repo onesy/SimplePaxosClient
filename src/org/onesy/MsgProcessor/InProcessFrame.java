@@ -54,5 +54,27 @@ public class InProcessFrame {
 	 *  之前发送出的消息的Bean,以方便重试
 	 */
 	public MsgBean FrontMsg = null;
+	/**
+	 * 这次收到的消息
+	 */
+	public MsgBean ThisMsgBean = null;
 	
+	/**
+	 * 创建新的InProcessFrame
+	 * 通过MsgBean
+	 */
+	
+	private InProcessFrame(MsgBean msgBean){
+		this.TimeStamp = System.currentTimeMillis();
+		this.FrameSign = ProcessWindow.GetKeyFromMsgBean(msgBean);
+		this.OppositeSide = MsgBean.getCfgBean(msgBean.sign);
+		this.ThisMsgBean = msgBean;
+		this.InProcessType = msgBean.msgType;
+		
+	}
+	
+	public static InProcessFrame getInProcessFrame(MsgBean msgBean){
+		InProcessFrame rtnFrame = new InProcessFrame(msgBean);
+		return rtnFrame;
+	}
 }

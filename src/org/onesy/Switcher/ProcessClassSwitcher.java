@@ -5,7 +5,7 @@ import org.onesy.Orders.OrderBase;
 
 public class ProcessClassSwitcher {
 	public static OrderBase getProcessObject(MsgBean msgbean){
-		String classname = msgbean.msgKind;
+		String classname = msgbean.msgType;
 		String msg = msgbean.Msg;
 		OrderBase orderObject = null;
 		try {
