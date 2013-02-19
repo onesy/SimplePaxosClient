@@ -55,7 +55,7 @@ public class MsgBean implements Serializable {
 	}
 
 	public static CfgBean getCfgBean(String sign) {
-		return NodeDictionary.getCfgBean(sign);
+		return NodeDictionary.GetCfgBean(sign);
 	}
 
 	public static MsgBean getMsgBean(String receivedMsg) {

@@ -1,40 +1,58 @@
 package org.onesy.NodesManage;
 
+import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.onesy.ConfigureProcess.CfgBean;
 import org.onesy.MsgProcessor.MsgBean;
+import org.onesy.Util.CommonAlgorithm;
 
 public class NodeDictionary {
-	
-	public static ConcurrentHashMap<String, CfgBean> NodesDictionary = new ConcurrentHashMap<String, CfgBean>();
-	
+
+	public static HashMap<String, CfgBean> NodesDictionary = new HashMap<String, CfgBean>();
+
 	public static LinkedList<CfgBean> NodesLinkedList = new LinkedList<CfgBean>();
-	
-	public static CfgBean getCfgBean(String Key){
+
+	public static CfgBean GetCfgBean(String Key) {
 		return NodeDictionary.NodesDictionary.get(Key);
 	}
-	
-	public static synchronized void putCfgBean(String sign, CfgBean cfgBean){
+
+	public static synchronized void PutCfgBean(String sign, CfgBean cfgBean) {
 		NodeDictionary.NodesDictionary.put(sign, cfgBean);
-		NodeDictionary.NodesLinkedList.add(InsertPointFinder(cfgBean), cfgBean);
+		NodeDictionary.NodesLinkedList.add(PositionFinder(cfgBean.sign),
+				cfgBean);
 	}
+
 	/**
 	 * 返回裁决者节点的信息
+	 * 
 	 * @param msgBean
 	 * @return CfgBean
 	 */
-	public static synchronized CfgBean GetArbiter(MsgBean msgBean){
+	public static synchronized CfgBean GetArbiter(MsgBean msgBean) {
 		return null;
 	}
-	
-	public static synchronized CfgBean GetResponser(String msg){
+
+	public static synchronized CfgBean GetResponser(String msg) {
 		return null;
 	}
-	
-	private static int InsertPointFinder(CfgBean cfgBean){
-		return 0;
+
+	private static int PositionFinder(String value) {
+		int count = 0;
+		if (NodesLinkedList.size() < 1) {
+			return count;
+		} else {
+			for (CfgBean nodeInfoBean : NodesLinkedList) {
+				if (new BigInteger(CommonAlgorithm.Md5Al(nodeInfoBean.sign))
+						.compareTo(new BigInteger(CommonAlgorithm.Md5Al(value))) == 1) {
+					//找到插入点
+					return ++count;
+				}
+				count ++;
+			}
+		}
+		return count;
 	}
 
 }
