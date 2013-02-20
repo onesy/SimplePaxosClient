@@ -16,6 +16,10 @@ public class CfgCenter {
 	 */
 	public static final long FRAME_TIME_OUT = 500;
 	/**
+	 * 栈帧补偿时间，500毫秒
+	 */
+	public static final long FRAME_COMPENSATE_TIME = 500;
+	/**
 	 * 分割符 \r\r\n\n
 	 */
 	public static final String SEPERATOR = "\r\r\n\n";

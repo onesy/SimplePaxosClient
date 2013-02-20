@@ -35,6 +35,10 @@ public class InProcessFrame {
 	 */
 	public long TimeStamp = 0l;
 	/**
+	 * 处理补偿时间
+	 */
+	public long CompensateTime = 0l;
+	/**
 	 * 冲突仲裁节点
 	 */
 	public CfgBean Arbiter = null;

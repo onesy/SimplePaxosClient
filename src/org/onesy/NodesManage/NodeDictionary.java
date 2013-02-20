@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.onesy.ConfigureProcess.CfgBean;
-import org.onesy.MsgProcessor.MsgBean;
 import org.onesy.Util.CommonAlgorithm;
 
 public class NodeDictionary {
@@ -23,6 +22,10 @@ public class NodeDictionary {
 		NodeDictionary.NodesLinkedList.add(PositionFinder(cfgBean.sign),
 				cfgBean);
 	}
+	
+	private static synchronized CfgBean GetCfgFromList(int positoin){
+		return NodesLinkedList.get(positoin);
+	}
 
 	/**
 	 * 返回裁决者节点的信息
@@ -30,14 +33,26 @@ public class NodeDictionary {
 	 * @param msgBean
 	 * @return CfgBean
 	 */
-	public static synchronized CfgBean GetArbiter(MsgBean msgBean) {
-		return null;
+	public static synchronized CfgBean GetRandomArbiter() {
+		int position =(int) Math.floor(Math.random() * NodesLinkedList.size() * 8)% NodesLinkedList.size();
+		return GetCfgFromList(position);
 	}
 
+	/**
+	 * 返回响应者信息
+	 * 选择响应者和消息内容有关和消息bean无关,仅仅在被请求保存或者读取的事后可以起到作用，其他情况下，尤其是已经开始的事务，不能使用该方法否则会出错
+	 * @param msg
+	 * @return
+	 */
 	public static synchronized CfgBean GetResponser(String msg) {
-		return null;
+		return GetCfgFromList(PositionFinder(msg));
 	}
 
+	/**
+	 * 通过计算MD5找出值所归属的节点在链表中的位置
+	 * @param value
+	 * @return
+	 */
 	private static int PositionFinder(String value) {
 		int count = 0;
 		if (NodesLinkedList.size() < 1) {
