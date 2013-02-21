@@ -2,6 +2,9 @@ package org.onesy.Util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class CommonAlgorithm {
 	
@@ -21,6 +24,10 @@ public class CommonAlgorithm {
 		md5.update(SRCStr.getBytes());
 		byte[] result = md5.digest();
 		return result;
+	}
+	
+	public static Iterator HashMapToIterator(Map hashMap){
+		return hashMap.entrySet().iterator();
 	}
 
 }

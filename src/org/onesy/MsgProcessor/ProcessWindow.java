@@ -1,10 +1,13 @@
 package org.onesy.MsgProcessor;
 
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.onesy.ConfigureProcess.CfgCenter;
+import org.onesy.Util.CommonAlgorithm;
 
-public class ProcessWindow {
+public class ProcessWindow implements Runnable {
 
 	/**
 	 * 正在处理中的事务窗口
@@ -29,35 +32,114 @@ public class ProcessWindow {
 	 * @param msgBean
 	 * @return
 	 */
-	public static InProcessFrame getInProcessFrame(MsgBean msgBean) {
+	public static synchronized InProcessFrame getInProcessFrame(MsgBean msgBean) {
 		InProcessFrame rtnFrame = null;
-		if(ProcessWindow.InProcessFrameWindowCache
-				.containsKey(GetKeyFromMsgBean(msgBean))){
-			//可以在正在处理的事务窗口中找到
-			rtnFrame = ProcessWindow.InProcessFrameWindowCache.get(GetKeyFromMsgBean(msgBean));
-			//成功处理一次即可获得500ms的补偿时间
-			rtnFrame.CompensateTime += CfgCenter.FRAME_COMPENSATE_TIME;
-		}else if(ProcessWindow.TimeOutFrameWindowCache.containsKey(GetKeyFromMsgBean(msgBean))){
-			//虽然已经过期但是处理时间并未消亡
-			//成功被找到就会立即获得2倍补偿时间并且从
-			TODO
-		}else
-		{
-			//创建新的ProcessFrame并返回
-			rtnFrame =  getInProcessFrame(msgBean);
+		if (ProcessWindow.InProcessFrameWindowCache
+				.containsKey(GetKeyFromMsgBean(msgBean))) {
+			// 可以在正在处理的事务窗口中找到,
+			rtnFrame = ProcessWindow.InProcessFrameWindowCache
+					.get(GetKeyFromMsgBean(msgBean));
+			// 刷新，并且增加frame的补偿时间和生存时间
+			rtnFrame = FrameTimeFlusher(rtnFrame);
+		} else if (ProcessWindow.TimeOutFrameWindowCache
+				.containsKey(GetKeyFromMsgBean(msgBean))) {
+			// 虽然已经过期但是处理时间并未耗尽
+			// 成功被找到就会刷新生存时间和过期时间并且从过期缓冲区中移除并加入到正在处理的缓冲区中
+			rtnFrame = ProcessWindow.TimeOutFrameWindowCache
+					.get(GetKeyFromMsgBean(msgBean));
+			rtnFrame = FrameTimeFlusher(rtnFrame);
+			// 移动栈帧到正在处理的缓冲区中
+			FrameMove(rtnFrame, TimeOutFrameWindowCache, InProcessFrameWindowCache);
+			
+		} else if (DeathFrameWindowCache
+				.containsKey(GetKeyFromMsgBean(msgBean))) {
+			//如果事务已经死亡，就直接可以返回null
+		} else {
+			// 创建新的ProcessFrame并返回
+			rtnFrame = getInProcessFrame(msgBean);
 		}
 		return rtnFrame;
 	}
-	
-	public static String GetKeyFromMsgBean(MsgBean msgBean){
+
+	public static String GetKeyFromMsgBean(MsgBean msgBean) {
 		String rtn = msgBean.sign + "_" + msgBean.TransactionSerialNo;
 		return rtn;
 	}
+	
+	/**
+	 * 刷新frame的时间
+	 * @param frame
+	 * @return
+	 */
+	public static InProcessFrame FrameTimeFlusher(InProcessFrame frame){
+			//过期栈帧刷新补偿时间和生存时间
+			frame.CompensateTime = System.currentTimeMillis() - frame.TimeStamp + CfgCenter.FRAME_COMPENSATE_TIME;
+			frame.FramePrivateLiveTime = System.currentTimeMillis() - frame.TimeStamp + CfgCenter.FRAME_LIVE_TIME;
+		return frame;
+	}
+
 	/**
 	 * 从InProcessFrameWindowCache中清除已经过期的帧，将其放入TimeOutFrameWindowCache
 	 * 从TimeOutFrameWindowCache中清除LIVE_TIME已经超过的
 	 */
-	public static synchronized void ClearTimeOutFrame(){
+	@SuppressWarnings("rawtypes")
+	public static synchronized void ClearTimeOutFrame() {
+		long InProcExpiredTime = CfgCenter.FRAME_EXPIRE_TIME;
+		long FrameLiveTime = CfgCenter.FRAME_LIVE_TIME;
+		Iterator iter = null ;
+		// 清理InProcessFrameWindowCache
+		iter = CommonAlgorithm.HashMapToIterator(InProcessFrameWindowCache);
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry)iter.next();
+			String key = (String)entry.getKey();
+			if(InProcessFrameWindowCache.containsKey(key)){
+				InProcessFrame tmp = InProcessFrameWindowCache.get(key);
+				if(IsFrameExpired(tmp, InProcExpiredTime)){
+					FrameMove(tmp, InProcessFrameWindowCache, TimeOutFrameWindowCache);
+				}
+			}
+		}
+		// 清理TimeOutFrameWindowCache中已经耗尽了生存时间的帧
+		iter = CommonAlgorithm.HashMapToIterator(TimeOutFrameWindowCache);
+		while(iter.hasNext()){
+			Map.Entry entry = (Map.Entry)iter.next();
+			String key = (String)entry.getKey();
+			if(TimeOutFrameWindowCache.containsKey(key)){
+				InProcessFrame tmp = InProcessFrameWindowCache.get(key);
+				if(IsFrameExpired(tmp, FrameLiveTime)){
+					FrameMove(tmp, TimeOutFrameWindowCache, DeathFrameWindowCache);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 从srcMap中将指定的frame移除，并且放入到targMap
+	 * @param frame
+	 * @param srcMap
+	 * @param targMap
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static void FrameMove(InProcessFrame frame, Map srcMap, Map targMap){
+		targMap.put(frame.FrameSign, frame);
+		srcMap.remove(frame.FrameSign);
+	}
+	
+	/**
+	 * 判断帧是否在指定的时间差内过期
+	 * @param frame
+	 * @param TimeDiff
+	 * @return
+	 */
+	public static boolean IsFrameExpired(InProcessFrame frame, long TimeDiff){
+		if(System.currentTimeMillis() - (frame.TimeStamp + frame.CompensateTime) > TimeDiff)
+			return true;
+		return false;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
 		
 	}
 

@@ -12,13 +12,17 @@ import java.util.Properties;
 public class CfgCenter {
 	
 	/**
-	 * 栈帧过期时间，500毫秒，不可以更改
+	 * 栈帧过期时间，5000毫秒，不可以更改
 	 */
-	public static final long FRAME_TIME_OUT = 500;
+	public static final long FRAME_EXPIRE_TIME = 5000;
 	/**
-	 * 栈帧补偿时间，500毫秒
+	 * 栈帧补偿时间，5000毫秒
 	 */
-	public static final long FRAME_COMPENSATE_TIME = 500;
+	public static final long FRAME_COMPENSATE_TIME = 5000;
+	/**
+	 * 栈帧最长存活时间,8倍于FRAME_EXPIRE_TIME时间
+	 */
+	public static final long FRAME_LIVE_TIME = 8 * FRAME_EXPIRE_TIME;
 	/**
 	 * 分割符 \r\r\n\n
 	 */

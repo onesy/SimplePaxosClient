@@ -1,6 +1,7 @@
 package org.onesy.MsgProcessor;
 
 import org.onesy.ConfigureProcess.CfgBean;
+import org.onesy.ConfigureProcess.CfgCenter;
 /**
  * 处理中的事务的窗口，未完成，差不多完成了
  * @author onesy
@@ -38,6 +39,10 @@ public class InProcessFrame {
 	 * 处理补偿时间
 	 */
 	public long CompensateTime = 0l;
+	/**
+	 * 存活时间，该存活时间的变量高于全局变量FRAME_LIVE_TIME
+	 */
+	public long FramePrivateLiveTime = CfgCenter.FRAME_LIVE_TIME;
 	/**
 	 * 冲突仲裁节点
 	 */
