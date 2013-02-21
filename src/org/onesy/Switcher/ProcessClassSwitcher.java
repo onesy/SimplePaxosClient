@@ -5,7 +5,7 @@ import org.onesy.Orders.OrderBase;
 
 public class ProcessClassSwitcher {
 	/**
-	 * @deprecated
+	 * @deprecated 已经废弃
 	 * @param msgbean
 	 * @return
 	 */

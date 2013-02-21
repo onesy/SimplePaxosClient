@@ -65,6 +65,50 @@ public class ProcessWindow implements Runnable {
 		String rtn = msgBean.sign + "_" + msgBean.TransactionSerialNo;
 		return rtn;
 	}
+	public static String GetKeyFromFrame(InProcessFrame frame){
+		return frame.FrameSign;
+	}
+	
+	/**
+	 * 通过msgbean去刷新对应的frame刷新frame生命时间
+	 * @param frame
+	 * @param msgBean
+	 */
+	public static synchronized void FlushFrameInfo(InProcessFrame frame, MsgBean msgBean){
+		frame.FrontMsg = frame.ThisMsgBean;
+		frame.ThisMsgBean = msgBean;
+		frame.FronProcessType = msgBean.msgType;
+		FrameTimeFlusher(frame);
+	}
+	
+	/**
+	 * 检查栈帧是否已经被处理过
+	 * @param frame
+	 * @return
+	 */
+	public static synchronized boolean IsFrameProcessed(InProcessFrame frame){
+		return !ProcessedFrameWindowCache.containsKey(GetKeyFromFrame(frame));
+	}
+	
+	/**
+	 * 结束时候检查，同时结束frame的生命
+	 * @param frame
+	 * @return
+	 */
+	public static synchronized boolean FrameFinish(InProcessFrame frame){
+		boolean  frameCheckflg = true;
+		if(InProcessFrameWindowCache.containsKey(GetKeyFromFrame(frame))){
+			FrameMove(frame, InProcessFrameWindowCache, ProcessedFrameWindowCache);
+		}else if(TimeOutFrameWindowCache.containsKey(GetKeyFromFrame(frame))) {
+			FrameMove(frame, TimeOutFrameWindowCache, ProcessedFrameWindowCache);
+		}else if (DeathFrameWindowCache.containsKey(GetKeyFromFrame(frame))) {
+			FrameMove(frame, DeathFrameWindowCache, ProcessedFrameWindowCache);
+		}else if(ProcessedFrameWindowCache.containsKey(GetKeyFromFrame(frame))){
+			//说明信息出现了重复
+			frameCheckflg = false;
+		}
+		return frameCheckflg;
+	}
 	
 	/**
 	 * 刷新frame的时间
@@ -140,7 +184,16 @@ public class ProcessWindow implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		
+		for(;;){
+			ClearTimeOutFrame();
+			
+			try {
+				Thread.sleep(CfgCenter.FRAME_EXPIRE_TIME);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 }
