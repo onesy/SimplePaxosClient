@@ -43,6 +43,7 @@ public class CfgBean {
 				&& properties.containsKey("db")
 				&& properties.containsKey("password")
 				&& properties.containsKey("timeout"))) {
+			System.err.println("配置文件错误");
 			return null;
 		}
 

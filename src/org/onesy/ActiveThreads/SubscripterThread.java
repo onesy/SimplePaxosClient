@@ -2,14 +2,25 @@ package org.onesy.ActiveThreads;
 
 import org.onesy.Communication.Subscripter;
 import org.onesy.ConfigureProcess.CfgCenter;
-
 import redis.clients.jedis.Jedis;
 
 public class SubscripterThread implements Runnable {
 
-	public static final Jedis JEDIS = new Jedis(CfgCenter.selfbean.host, CfgCenter.selfbean.port, CfgCenter.selfbean.timeout);
+	/**
+	 * DEBUG SEG
+	 */
+	
+	/**
+	 * DEBUG SEG
+	 */
+	public static Jedis JEDIS = null ; 
 	
 	public static final Subscripter SUBSCRIPTER = new Subscripter();
+	
+	public SubscripterThread(){
+		SubscripterThread.JEDIS = new Jedis(CfgCenter.selfbean.host, CfgCenter.selfbean.port, CfgCenter.selfbean.timeout);
+	}
+	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub

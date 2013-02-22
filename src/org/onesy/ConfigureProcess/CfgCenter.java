@@ -24,6 +24,14 @@ public class CfgCenter {
 	 */
 	public static final long FRAME_LIVE_TIME = 8 * FRAME_EXPIRE_TIME;
 	/**
+	 * publisher队列长度
+	 */
+	public static final int PUBLISHER_QUEUE_LEN = 500;
+	/**
+	 * subscripter队列长度
+	 */
+	public static final int SUBSCRIPTER_QUEUE_LEN = 500;
+	/**
 	 * 分割符 \r\r\n\n
 	 */
 	public static final String SEPERATOR = "\r\r\n\n";
@@ -58,6 +66,7 @@ public class CfgCenter {
 						+ File.separator + (String) entry.getKey())));
 			}
 		}
+		CfgCenter.selfbean = CfgBean.getInstance(SelfProperties);
 	}
 
 	public static synchronized CfgCenter getInstance() {
