@@ -21,7 +21,7 @@ public class NIOSocketServer {
 		// 加载字节编码集
 		Charset cs = Charset.forName(encoding);
 		// 分配两个字节大小的字节缓冲区
-		ByteBuffer buffer = ByteBuffer.allocate(16);
+		ByteBuffer buffer = ByteBuffer.allocate(1024);
 		SocketChannel ch = null;
 		// 打开服务端的套接字通道
 		ServerSocketChannel ssc = ServerSocketChannel.open();

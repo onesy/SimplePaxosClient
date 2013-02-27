@@ -56,10 +56,11 @@ public class ProcessWindow implements Runnable {
 			//如果事务已经死亡，就直接可以返回null
 		} else {
 			// 创建新的ProcessFrame并返回
-			rtnFrame = getInProcessFrame(msgBean);
+			rtnFrame = InProcessFrame.getInProcessFrame(msgBean);
 		}
 		return rtnFrame;
 	}
+	
 
 	public static String GetKeyFromMsgBean(MsgBean msgBean) {
 		String rtn = msgBean.sign + "_" + msgBean.TransactionSerialNo;
