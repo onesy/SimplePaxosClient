@@ -47,7 +47,7 @@ public class MsgBean implements Serializable {
 		this.VoteSerialNo = voteSerialNo + 1;
 		this.msgType = msgkind;
 	}
-
+	//voteSerialNo\r\r\n\nsign\r\r\n\nmsgKing\r\r\n\nMsg
 	public MsgBean(String voteSerialNo, String sign, String msgKind, String Msg) {
 		this.VoteSerialNo = Long.parseLong(voteSerialNo);
 		this.sign = sign;
