@@ -3,7 +3,11 @@ package org.onesy.Communication;
 import org.onesy.ConfigureProcess.CfgBean;
 
 import redis.clients.jedis.Jedis;
-
+/**
+ * @deprecated 不再使用，已经使用newio socket通信了
+ * @author onesy
+ *
+ */
 public class Publisher {
 
 	/**

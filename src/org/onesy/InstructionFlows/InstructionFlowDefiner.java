@@ -19,6 +19,6 @@ public class InstructionFlowDefiner {
 	 * ToBeArbiter
 	 */
 
-	public static String[] ICodeIFNamePair = { "001,ShutDown", "002,Pause",
-			"100,SetKV", "101,GetKV", "102,Confirm", "103,ToBeArbiter" };
+	public static String[] ICodeIFNamePair = { "001,ShutDownOrder", "002,PauseOrder",
+			"100,SetKVOrder", "101,GetKVOrder", "102,ConfirmOrder", "103,ToBeArbiterOrder" };
 }

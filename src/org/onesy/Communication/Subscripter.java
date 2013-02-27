@@ -4,7 +4,11 @@ import org.onesy.MsgProcessor.MsgAsile;
 import org.onesy.MsgProcessor.MsgBean;
 
 import redis.clients.jedis.JedisPubSub;
-
+/**
+ * @deprecated
+ * @author onesy
+ *
+ */
 public class Subscripter extends JedisPubSub {
 
 	@Override

@@ -34,7 +34,12 @@ public class CfgCenter {
 	/**
 	 * 分割符 \r\r\n\n
 	 */
-	public static final String SEPERATOR = "\r\r\n\n";
+	public static final String SEPERATOR = "\r\r\r";
+	
+	/**
+	 * 通信结束符
+	 */
+	public static final String ConnectEND = "\r\r\rEND";
 
 	private static CfgCenter cfgCenter = null;
 

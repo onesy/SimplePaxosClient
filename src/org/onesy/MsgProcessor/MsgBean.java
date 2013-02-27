@@ -17,6 +17,7 @@ public class MsgBean implements Serializable {
 	 * 针对冲突解决的序列号，越小，优先级越高
 	 */
 	public Long VoteSerialNo = 0l;
+
 	/**
 	 * 针对处理事件跟踪的序列号，在一个事物被处理的过程中，该序列号不变，但是不同事物之间呈自增.
 	 */
@@ -47,7 +48,8 @@ public class MsgBean implements Serializable {
 		this.VoteSerialNo = voteSerialNo + 1;
 		this.msgType = msgkind;
 	}
-	//voteSerialNo\r\r\n\nsign\r\r\n\nmsgKing\r\r\n\nMsg
+
+	// voteSerialNo\r\r\n\nsign\r\r\n\nmsgKing\r\r\n\nMsg
 	public MsgBean(String voteSerialNo, String sign, String msgKind, String Msg) {
 		this.VoteSerialNo = Long.parseLong(voteSerialNo);
 		this.sign = sign;
@@ -59,11 +61,19 @@ public class MsgBean implements Serializable {
 	}
 
 	public static MsgBean getMsgBean(String receivedMsg) {
-
+		System.err.println(receivedMsg);
+//		System.exit(0);
 		String[] beansInfo = receivedMsg.split(CfgCenter.SEPERATOR);
 
 		return new MsgBean(beansInfo[0], beansInfo[1], beansInfo[2],
 				beansInfo[3]);
+	}
+
+	public static String DecodeToStr(MsgBean msgBean) {
+		String msg = new String(msgBean.VoteSerialNo + CfgCenter.SEPERATOR
+				+ msgBean.sign + CfgCenter.SEPERATOR + msgBean.msgType
+				+ CfgCenter.SEPERATOR + msgBean.Msg);
+		return msg;
 	}
 
 }
