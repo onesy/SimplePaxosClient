@@ -53,6 +53,7 @@ public class MsgBean implements Serializable {
 	public MsgBean(String voteSerialNo, String sign, String msgKind, String Msg) {
 		this.VoteSerialNo = Long.parseLong(voteSerialNo);
 		this.sign = sign;
+		this.msgType = msgKind;
 		this.Msg = Msg;
 	}
 
