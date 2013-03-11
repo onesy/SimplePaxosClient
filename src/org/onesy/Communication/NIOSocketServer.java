@@ -64,7 +64,7 @@ public class NIOSocketServer {
 						CharBuffer cb = cs.decode((ByteBuffer) buffer.flip());
 						String response = cb.toString();
 						// 数据结构 voteSerialNo\r\r\n\nsign\r\r\n\nmsgKing\r\r\n\nMsg
-						System.out.println("Echoing:" + response);
+//						System.out.println("Echoing:" + response);
 						MsgAsile.addReceivedBean(MsgBean.getMsgBean(response));
 						// 重绕字节缓冲区，继续读取客户端套接字通道数据
 						ch.write((ByteBuffer) buffer.rewind());
