@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.onesy.ConfigureProcess.CfgBean;
+import org.onesy.ConfigureProcess.CfgCenter;
 import org.onesy.Util.CommonAlgorithm;
 
 public class NodeDictionary {
@@ -13,6 +14,12 @@ public class NodeDictionary {
 
 	public static LinkedList<CfgBean> NodesLinkedList = new LinkedList<CfgBean>();
 
+	public static void LoadNodes(){
+		for(CfgBean cb : CfgCenter.cfgBeansList){
+			PutCfgBean(cb.sign, cb);
+		}
+	}
+	
 	public static CfgBean GetCfgBean(String Key) {
 		return NodeDictionary.NodesDictionary.get(Key);
 	}
@@ -59,8 +66,8 @@ public class NodeDictionary {
 			return count;
 		} else {
 			for (CfgBean nodeInfoBean : NodesLinkedList) {
-				if (new BigInteger(CommonAlgorithm.Md5Al(nodeInfoBean.sign))
-						.compareTo(new BigInteger(CommonAlgorithm.Md5Al(value))) == 1) {
+				if (new BigInteger(CommonAlgorithm.Md5Al(nodeInfoBean.sign)).abs()
+						.compareTo(new BigInteger(CommonAlgorithm.Md5Al(value)).abs()) == 1) {
 					//找到插入点
 					return ++count;
 				}
@@ -69,5 +76,6 @@ public class NodeDictionary {
 		}
 		return count;
 	}
+	
 
 }

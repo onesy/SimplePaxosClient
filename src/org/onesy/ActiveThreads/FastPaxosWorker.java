@@ -26,6 +26,7 @@ public class FastPaxosWorker implements Runnable {
 				// 刷新帧的信息
 				ProcessWindow.FlushFrameInfo(frame, receivedMsg);
 				// 获得流程类名称
+				System.err.println(frame.ThisMsgBean);
 				String IName = InstructionFlowTypeMapper.getInstructionNameByCode(frame.TrasanctionCode);
 				// 获得流程对象
 				orderObj = ProcessClassSwitcher.getInstructionByName(IName);

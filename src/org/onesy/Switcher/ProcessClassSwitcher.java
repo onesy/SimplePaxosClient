@@ -38,7 +38,7 @@ public class ProcessClassSwitcher {
 		Class<OrderBase> orderClass = null;
 		OrderBase order = null;
 			try {
-				orderClass = (Class<OrderBase>) Class.forName(IName);
+				orderClass = (Class<OrderBase>) Class.forName("org.onesy.Orders."+IName);
 				order = orderClass.newInstance();
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block

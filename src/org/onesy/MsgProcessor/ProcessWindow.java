@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.onesy.ConfigureProcess.CfgCenter;
+import org.onesy.InstructionFlows.InstructionFlowTypeMapper;
 import org.onesy.Util.CommonAlgorithm;
 
 public class ProcessWindow implements Runnable {
@@ -79,6 +80,7 @@ public class ProcessWindow implements Runnable {
 		frame.FrontMsg = frame.ThisMsgBean;
 		frame.ThisMsgBean = msgBean;
 		frame.FronProcessType = msgBean.msgType;
+		frame.TrasanctionCode = InstructionFlowTypeMapper.getCodeByInstructionName(msgBean.msgType);
 		FrameTimeFlusher(frame);
 	}
 	
