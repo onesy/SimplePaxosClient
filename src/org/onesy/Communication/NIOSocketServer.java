@@ -10,10 +10,11 @@ import java.nio.charset.*;
 import org.onesy.ConfigureProcess.CfgCenter;
 import org.onesy.MsgProcessor.MsgAsile;
 import org.onesy.MsgProcessor.MsgBean;
+import org.onesy.Util.SPSDebugHelper;
 
 public class NIOSocketServer {
 	public static final int PORT = CfgCenter.selfbean.SubPort;
-	
+
 	public void listen() throws IOException {
 		// NIO的通道channel中内容读取到字节缓冲区ByteBuffer时是字节方式存储的，
 		// 对于以字符方式读取和处理的数据必须要进行字符集编码和解码
@@ -34,7 +35,8 @@ public class NIOSocketServer {
 			ssc.socket().bind(new InetSocketAddress(PORT));
 			// 将服务端套接字通道OP_ACCEP事件注册到通道选择器上
 			SelectionKey key = ssc.register(sel, SelectionKey.OP_ACCEPT);
-			System.out.println("Server on port:" + PORT);
+			// System.out.println("Server on port:" + PORT);
+			SPSDebugHelper.Speaker("Server on port:" + PORT, 1);
 			while (true) {
 				// 通道选择器开始轮询通道事件
 				sel.select();
@@ -47,8 +49,10 @@ public class NIOSocketServer {
 					if (skey.isAcceptable()) {
 						// 获取服务端套接字通道上连接的客户端套接字通道
 						ch = ssc.accept();
-						System.out.println("Accepted connection from:"
-								+ ch.socket());
+//						System.out.println("Accepted connection from:"
+//								+ ch.socket());
+						SPSDebugHelper.Speaker(
+								"Accepted connection from:" + ch.socket(), 1);
 						// 将客户端套接字通过连接模式调整为非阻塞模式
 						ch.configureBlocking(false);
 						// 将客户端套接字通道OP_READ事件注册到通道选择器上
@@ -63,8 +67,9 @@ public class NIOSocketServer {
 						// 使用字符集解码字节缓冲区数据
 						CharBuffer cb = cs.decode((ByteBuffer) buffer.flip());
 						String response = cb.toString();
-						// 数据结构 voteSerialNo\r\r\n\nsign\r\r\n\nmsgKing\r\r\n\nMsg
-//						System.out.println("Echoing:" + response);
+						// 数据结构
+						// voteSerialNo\r\r\n\nsign\r\r\n\nmsgKing\r\r\n\nMsg
+						// System.out.println("Echoing:" + response);
 						MsgAsile.addReceivedBean(MsgBean.getMsgBean(response));
 						// 重绕字节缓冲区，继续读取客户端套接字通道数据
 						ch.write((ByteBuffer) buffer.rewind());

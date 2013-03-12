@@ -3,6 +3,7 @@ package org.onesy.ConfigureProcess;
 import java.util.Properties;
 
 import org.onesy.NodesManage.NodeDictionary;
+import org.onesy.Util.SPSDebugHelper;
 
 public class CfgBean {
 
@@ -66,7 +67,8 @@ public class CfgBean {
 					.containsKey("vote"))
 				&& properties.containsKey("pubport")
 				&& properties.containsKey("subport")) {
-			System.err.println("配置文件错误");
+//			System.err.println("配置文件错误");
+			SPSDebugHelper.Speaker("配置文件错误", 2);
 			return null;
 		}
 

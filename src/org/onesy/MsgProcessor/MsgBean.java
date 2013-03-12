@@ -39,22 +39,24 @@ public class MsgBean implements Serializable {
 	 */
 	public String Msg = null;
 
-	public MsgBean(CfgBean cfgBean, long voteSerialNo, String msgkind,
+	public MsgBean(CfgBean cfgBean,String  transactionSerialNo,long voteSerialNo, String msgkind,
 			String msg) {
 		this.sign = cfgBean.host + "_" + cfgBean.port + "_"
 				+ cfgBean.pubchannel + "_" + cfgBean.subchannel + "_"
 				+ cfgBean.db;
 		this.Msg = msg;
-		this.VoteSerialNo = voteSerialNo + 1;
+		this.VoteSerialNo = voteSerialNo;
 		this.msgType = msgkind;
+		this.TransactionSerialNo = Long.parseLong(transactionSerialNo);
 	}
 
 	// voteSerialNo\r\r\n\nsign\r\r\n\nmsgKing\r\r\n\nMsg
-	public MsgBean(String voteSerialNo, String sign, String msgKind, String Msg) {
+	public MsgBean(String voteSerialNo, String sign, String msgKind, String TransactionSerialNo, String Msg) {
 		this.VoteSerialNo = Long.parseLong(voteSerialNo);
 		this.sign = sign;
 		this.msgType = msgKind;
 		this.Msg = Msg;
+		this.TransactionSerialNo = Long.parseLong(TransactionSerialNo);
 	}
 
 	public static CfgBean getCfgBean(String sign) {
@@ -63,11 +65,11 @@ public class MsgBean implements Serializable {
 
 	public static MsgBean getMsgBean(String receivedMsg) {
 		System.err.println(receivedMsg);
-//		System.exit(0);
+		// System.exit(0);
 		String[] beansInfo = receivedMsg.split(CfgCenter.SEPERATOR);
 
 		return new MsgBean(beansInfo[0], beansInfo[1], beansInfo[2],
-				beansInfo[3]);
+				beansInfo[3],beansInfo[4]);
 	}
 
 	public static String DecodeToStr(MsgBean msgBean) {
@@ -75,6 +77,25 @@ public class MsgBean implements Serializable {
 				+ msgBean.sign + CfgCenter.SEPERATOR + msgBean.msgType
 				+ CfgCenter.SEPERATOR + msgBean.Msg);
 		return msg;
+	}
+
+	/**
+	 * 
+	 * @param cfgbean
+	 * @param msg
+	 * @param type 需要转变的消息类型
+	 * @return
+	 */
+	public static String TransToThisNode(CfgBean cfgbean, MsgBean msg,
+			String type) {
+		if (type != null) {
+			MsgBean thisMsgBean = new MsgBean(cfgbean, msg.TransactionSerialNo.toString() , msg.VoteSerialNo,
+					type, msg.Msg);
+		} else {
+			MsgBean thisMsgBean = new MsgBean(cfgbean, msg.TransactionSerialNo.toString() , msg.VoteSerialNo,
+					msg.msgType, msg.Msg);
+		}
+		return null;
 	}
 
 }
