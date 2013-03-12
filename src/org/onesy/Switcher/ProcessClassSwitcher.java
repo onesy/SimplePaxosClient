@@ -4,6 +4,9 @@ import org.onesy.MsgProcessor.MsgBean;
 import org.onesy.Orders.OrderBase;
 
 public class ProcessClassSwitcher {
+	
+	public static final String ORDER_PATH_PRE = "org.onesy.Orders.";
+	
 	/**
 	 * @deprecated 已经废弃
 	 * @param msgbean
@@ -38,7 +41,7 @@ public class ProcessClassSwitcher {
 		Class<OrderBase> orderClass = null;
 		OrderBase order = null;
 			try {
-				orderClass = (Class<OrderBase>) Class.forName("org.onesy.Orders."+IName);
+				orderClass = (Class<OrderBase>) Class.forName(ORDER_PATH_PRE+IName);
 				order = orderClass.newInstance();
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block

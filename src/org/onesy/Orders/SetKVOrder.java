@@ -20,20 +20,29 @@ public class SetKVOrder extends OrderBase {
 		String value = msgSplite[1];
 		CfgBean cfgbean = NodeDictionary.GetResponser(key);
 		// 如果本届点就是存储该数据的节点的话
-		if (cfgbean.sign.equals(CfgCenter.selfbean.sign)) {
+		if (cfgbean.sign.equals(CfgCenter.selfbean.sign)
+				|| SPSDebugHelper.DEBUG) {
 			// 设置值
 			this.SetKVToStore(key, value, CfgCenter.selfbean);
 			// 更新 frame
 			CfgBean cfgOpposite = frame.OppositeSide;
 			// 发起确认相应
-			MsgAsile.addSendBean(new MsgBean(CfgCenter.selfbean,
-					msgBean.TransactionSerialNo.toString(),
-					CfgCenter.selfbean.voteSeriNo, "ConfirmOrder",
-					msgBean.TransactionSerialNo + OrderBase.SetPhase + OrderBase.ORDER_SUCCESS));
+			if (msgBean.isOrigin.equals("0")) {
+				MsgAsile.addSendBean(new MsgBean(CfgCenter.selfbean,
+						msgBean.TransactionSerialNo.toString(),
+						CfgCenter.selfbean.voteSeriNo, "ConfirmOrder",
+						msgBean.TransactionSerialNo + OrderBase.SetPhase
+								+ OrderBase.ORDER_SUCCESS));
+			}
 			// 本次处理已经结束
 			ProcessWindow.FrameFinish(frame);
 		} else {
-			SPSDebugHelper.Speaker("应该选取其他节点", 1);
+			SPSDebugHelper.Speaker("非本届点处理该数据，该请求将被转发", 1);
+			/*
+			 * 规划
+			 * 1,sign被替换
+			 * 2,
+			 */
 		}
 		return null;
 	}

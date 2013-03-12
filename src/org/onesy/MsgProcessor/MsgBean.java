@@ -33,6 +33,11 @@ public class MsgBean implements Serializable {
 	 * 消息处理的种类，应该送至哪一个指令类进行处理
 	 */
 	public String msgType = null;
+	
+	/**
+	 * 是否是源发种类
+	 */
+	public String isOrigin = "0";
 
 	/**
 	 * 消息的内容，外层协议封装到此为止，更多需要封装的信息通过Msg正文进行再次封装
@@ -51,11 +56,12 @@ public class MsgBean implements Serializable {
 	}
 
 	// voteSerialNo\r\r\n\nsign\r\r\n\nmsgKing\r\r\n\nMsg
-	public MsgBean(String voteSerialNo, String sign, String msgKind, String TransactionSerialNo, String Msg) {
+	public MsgBean(String voteSerialNo, String sign, String msgKind, String TransactionSerialNo, String isOrigin, String Msg) {
 		this.VoteSerialNo = Long.parseLong(voteSerialNo);
 		this.sign = sign;
 		this.msgType = msgKind;
 		this.Msg = Msg;
+		this.isOrigin = isOrigin;
 		this.TransactionSerialNo = Long.parseLong(TransactionSerialNo);
 	}
 
@@ -64,12 +70,12 @@ public class MsgBean implements Serializable {
 	}
 
 	public static MsgBean getMsgBean(String receivedMsg) {
-		System.err.println(receivedMsg);
+//		System.err.println(receivedMsg);
 		// System.exit(0);
 		String[] beansInfo = receivedMsg.split(CfgCenter.SEPERATOR);
 
 		return new MsgBean(beansInfo[0], beansInfo[1], beansInfo[2],
-				beansInfo[3],beansInfo[4]);
+				beansInfo[3],beansInfo[4],beansInfo[5]);
 	}
 
 	public static String DecodeToStr(MsgBean msgBean) {

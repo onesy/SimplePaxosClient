@@ -32,7 +32,7 @@ public class CfgCenter {
 	 */
 	public static final int SUBSCRIPTER_QUEUE_LEN = 500;
 	/**
-	 * 分割符 \r\r\n\n
+	 * 分割符 \r\r\r
 	 */
 	public static final String SEPERATOR = "\r\r\r";
 	
