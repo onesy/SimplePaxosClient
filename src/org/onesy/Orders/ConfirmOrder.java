@@ -2,6 +2,7 @@ package org.onesy.Orders;
 
 import org.onesy.MsgProcessor.InProcessFrame;
 import org.onesy.MsgProcessor.MsgBean;
+import org.onesy.MsgProcessor.ProcessWindow;
 
 public class ConfirmOrder extends OrderBase {
 
@@ -23,9 +24,9 @@ public class ConfirmOrder extends OrderBase {
 		 * 第四步，返回消息
 		 */
 		
-		System.out.println("framsign = "+frame.FrameSign + "\n Msg:" + msgBean.Msg + " 已经得到确认");
-		
-		
+//		System.out.println("framsign = "+frame.FrameSign + "\n Msg:" + msgBean.Msg + " transaction = " + msgBean.TransactionSerialNo + " 已经得到确认");
+//		SPSDebugHelper.Speaker("正在销毁frame对象", 1);
+		ProcessWindow.FrameFinish(frame);
 		
 		return null;
 	}

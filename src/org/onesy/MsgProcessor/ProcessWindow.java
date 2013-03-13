@@ -7,8 +7,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.onesy.ConfigureProcess.CfgCenter;
 import org.onesy.InstructionFlows.InstructionFlowTypeMapper;
 import org.onesy.Util.CommonAlgorithm;
+import org.onesy.Util.SPSDebugHelper;
 
 public class ProcessWindow implements Runnable {
+	
+	/**
+	 * transactionNo和frame的映射
+	 */
+	public static ConcurrentHashMap<String, InProcessFrame> TransactionPointFrame = new ConcurrentHashMap<String, InProcessFrame>();
 
 	/**
 	 * 正在处理中的事务窗口
@@ -56,8 +62,14 @@ public class ProcessWindow implements Runnable {
 				.containsKey(GetKeyFromMsgBean(msgBean))) {
 			//如果事务已经死亡，就直接可以返回null
 		} else {
-			// 创建新的ProcessFrame并返回
+			// 创建新的ProcessFrame 并且将其存入正在处理事务窗口，和事务号映射窗口
 			rtnFrame = InProcessFrame.getInProcessFrame(msgBean);
+			// 刷新时间
+			rtnFrame = FrameTimeFlusher(rtnFrame);
+			// 放入正在处理事务窗口
+			ProcessWindow.InProcessFrameWindowCache.put(GetKeyFromFrame(rtnFrame), rtnFrame);
+			// 放入事务号-frame映射窗口
+			ProcessWindow.TransactionPointFrame.put(CfgCenter.TransanctionNo.toString(), rtnFrame);
 		}
 		return rtnFrame;
 	}
@@ -110,6 +122,8 @@ public class ProcessWindow implements Runnable {
 			//说明信息出现了重复
 			frameCheckflg = false;
 		}
+		SPSDebugHelper.Speaker("正在从TransactionPointFrame中删除key = " + GetKeyFromFrame(frame), 1);
+		TransactionPointFrame.remove(GetKeyFromFrame(frame));
 		return frameCheckflg;
 	}
 	
@@ -128,6 +142,7 @@ public class ProcessWindow implements Runnable {
 	/**
 	 * 从InProcessFrameWindowCache中清除已经过期的帧，将其放入TimeOutFrameWindowCache
 	 * 从TimeOutFrameWindowCache中清除LIVE_TIME已经超过的
+	 * 注意！这个函数暂时不会清理在TransactionPointFrame中的过期帧
 	 */
 	@SuppressWarnings("rawtypes")
 	public static synchronized void ClearTimeOutFrame() {
@@ -152,7 +167,7 @@ public class ProcessWindow implements Runnable {
 			Map.Entry entry = (Map.Entry)iter.next();
 			String key = (String)entry.getKey();
 			if(TimeOutFrameWindowCache.containsKey(key)){
-				InProcessFrame tmp = InProcessFrameWindowCache.get(key);
+				InProcessFrame tmp = TimeOutFrameWindowCache.get(key);
 				if(IsFrameExpired(tmp, FrameLiveTime)){
 					FrameMove(tmp, TimeOutFrameWindowCache, DeathFrameWindowCache);
 				}

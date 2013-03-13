@@ -7,6 +7,7 @@ import org.onesy.MsgProcessor.MsgBean;
 import org.onesy.MsgProcessor.ProcessWindow;
 import org.onesy.Orders.OrderBase;
 import org.onesy.Switcher.ProcessClassSwitcher;
+import org.onesy.Util.SPSDebugHelper;
 
 public class FastPaxosWorker implements Runnable {
 
@@ -35,6 +36,10 @@ public class FastPaxosWorker implements Runnable {
 			 * change point 1 end
 			 */
 			String feedBack = orderObj.ProcessMsg(frame,receivedMsg);
+			
+			if(feedBack != null){
+				SPSDebugHelper.Speaker(feedBack, 1);
+			}
 		}
 	}
 

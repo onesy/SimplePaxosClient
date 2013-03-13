@@ -79,7 +79,6 @@ public class InProcessFrame {
 		this.OppositeSide = MsgBean.getCfgBean(msgBean.sign);
 		this.ThisMsgBean = msgBean;
 		this.InProcessType = msgBean.msgType;
-		
 	}
 	
 	public static InProcessFrame getInProcessFrame(MsgBean msgBean){

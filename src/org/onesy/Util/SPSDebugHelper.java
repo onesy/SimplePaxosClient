@@ -9,6 +9,8 @@ public class SPSDebugHelper {
 	//-------------------------------------------
 	public static final String MSG_SPLITE="->";
 	
+	public static final String[] MSG_LEVEL = {"|MESSAGE","|ERROR","|WARNING"};
+	
 	public static void IsNull(Object object){
 		System.err.println("object = " + object);
 		if(object == null) {
@@ -20,18 +22,18 @@ public class SPSDebugHelper {
 		
 		
 		if(level == 1){
-			System.out.println(SpkFmt(msg));
+			System.out.println(SpkFmt(msg,1));
 		} else if (level == 2) {
-			System.err.println(msg);
+			System.err.println("ERROR:\r"+SpkFmt(msg,2));
 		} else if (level == 3) {
-			System.err.println("WARNING:\r" + SpkFmt(msg));
+			System.err.println("WARNING:\r" + SpkFmt(msg,3));
 		}
 	}
 	
-	public static String SpkFmt(String msg){
+	public static String SpkFmt(String msg,int level){
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
-		return "TIME:" + sdf.format(new Date()) + "|EVENT" + MSG_SPLITE +msg;
+		return "TIME:" + sdf.format(new Date()) + MSG_LEVEL[level - 1 ] + MSG_SPLITE +msg;
 	}
 
 }

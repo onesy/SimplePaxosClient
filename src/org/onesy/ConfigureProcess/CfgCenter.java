@@ -40,6 +40,11 @@ public class CfgCenter {
 	 * 通信结束符
 	 */
 	public static final String ConnectEND = "\r\r\rEND";
+	
+	/**
+	 * transactionNo,本届点处理事务的自增序列
+	 */
+	public static Long TransanctionNo = (long) 0;
 
 	private static CfgCenter cfgCenter = null;
 
