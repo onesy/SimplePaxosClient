@@ -74,7 +74,7 @@ public class ThreadOp implements Runnable {
 		threadDs[3] = ThreadOp.SetAsDaemon(fastPaxosWorkerD,
 				"fastPaxosWorkerD", false);
 		SPSDebugHelper.Speaker("初始化FastPaxosWorker线程完毕", 1);
-		threadDs[4] = ThreadOp.SetAsDaemon(loggerD, "LoogerD", false);// 更改点 2013年3月15日 增加 启动 loggerD线程
+		threadDs[4] = ThreadOp.SetAsDaemon(loggerD, "LoggerD", false);// 更改点 2013年3月15日 增加 启动 loggerD线程
 		SPSDebugHelper.Speaker("初始化LoogerD线程完毕", 1);// 更改点 2013年3月15日 增加 启动 loggerD线程
 		Self = SetAsDaemon(Self, "AdminD", false);
 		SPSDebugHelper.Speaker("初始化AdminD线程完毕", 1);
@@ -96,7 +96,7 @@ public class ThreadOp implements Runnable {
 
 	@Override
 	public void run() {
-		Runnable pulbisherD, subscripterD, processWindowD, fastPaxosWorkeD;
+		Runnable pulbisherD, subscripterD, processWindowD, fastPaxosWorkeD,loggerD;
 		// TODO Auto-generated method stub
 		for (;;) {
 			// 检查各个线程的工作状态
@@ -157,6 +157,20 @@ public class ThreadOp implements Runnable {
 						"FastPaxosWorkD", false);
 				FastPaxosWorkD.start();
 				SPSDebugHelper.Speaker("FastPaxosWorkD线程重启完毕", 2);
+			}
+			// 更改点 2013年3月15日 增加 启动 loggerD线程
+			// 检查 loggerD线程
+			if (LoggerD == null || !LoggerD.isAlive()) {
+				Thread tmpThread = LoggerD;
+				LoggerD = null;
+				// tmpThread.interrupt();
+				SPSDebugHelper.Speaker("LoggerD线程已经死亡", 3);
+				SPSDebugHelper.Speaker("LoggerD线程重启中......", 2);
+				loggerD = new LoggerThread();
+				LoggerD = ThreadOp.SetAsDaemon(loggerD,
+						"LoggerD", false);
+				LoggerD.start();
+				SPSDebugHelper.Speaker("LoggerD线程重启完毕", 2);
 			}
 		}
 	}
