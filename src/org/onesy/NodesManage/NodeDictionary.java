@@ -31,7 +31,7 @@ public class NodeDictionary {
 	}
 	
 	private static synchronized CfgBean GetCfgFromList(int positoin){
-		return NodesLinkedList.get(positoin);
+		return NodesLinkedList.get(positoin - 1);
 	}
 
 	/**
@@ -48,11 +48,11 @@ public class NodeDictionary {
 	/**
 	 * 返回响应者信息
 	 * 选择响应者和消息内容有关和消息bean无关,仅仅在被请求保存或者读取的事后可以起到作用，其他情况下，尤其是已经开始的事务，不能使用该方法否则会出错
-	 * @param msg
+	 * @param msgkey
 	 * @return
 	 */
-	public static synchronized CfgBean GetResponser(String msg) {
-		return GetCfgFromList(PositionFinder(msg));
+	public static synchronized CfgBean GetResponser(String msgkey) {
+		return GetCfgFromList(PositionFinder(msgkey));
 	}
 
 	/**

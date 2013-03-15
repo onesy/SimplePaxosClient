@@ -1,5 +1,6 @@
 package org.onesy.Orders;
 
+import org.onesy.Beans.KVContainer;
 import org.onesy.MsgProcessor.InProcessFrame;
 import org.onesy.MsgProcessor.MsgBean;
 import org.onesy.MsgProcessor.ProcessWindow;
@@ -28,6 +29,25 @@ public class ConfirmOrder extends OrderBase {
 //		SPSDebugHelper.Speaker("正在销毁frame对象", 1);
 		ProcessWindow.FrameFinish(frame);
 		
+		return null;
+	}
+	public static KVContainer GetKeyFromMsg(String msg) {
+		String[] msgSplite = msg.split(OrderBase.SetPhase);
+		String key = msgSplite[0];
+		String value = msgSplite[1];
+		KVContainer kvEntry = new KVContainer(key, value);
+		return kvEntry;
+	}
+
+	@Override
+	public String GetMsgKey(MsgBean msgBean) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String GetMsgVal(MsgBean msgBean) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

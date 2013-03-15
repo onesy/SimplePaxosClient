@@ -43,13 +43,15 @@ public class ProcessWindow implements Runnable {
 		InProcessFrame rtnFrame = null;
 		if (ProcessWindow.InProcessFrameWindowCache
 				.containsKey(GetKeyFromMsgBean(msgBean))) {
-			// 可以在正在处理的事务窗口中找到,
+			SPSDebugHelper.Speaker("可以在正在处理的事务窗口中找到", 3);
+			// 可以在正在处理的事务窗口中找到
 			rtnFrame = ProcessWindow.InProcessFrameWindowCache
 					.get(GetKeyFromMsgBean(msgBean));
 			// 刷新，并且增加frame的补偿时间和生存时间
 			rtnFrame = FrameTimeFlusher(rtnFrame);
 		} else if (ProcessWindow.TimeOutFrameWindowCache
 				.containsKey(GetKeyFromMsgBean(msgBean))) {
+			SPSDebugHelper.Speaker("虽然已经过期但是处理时间并未耗尽", 3);
 			// 虽然已经过期但是处理时间并未耗尽
 			// 成功被找到就会刷新生存时间和过期时间并且从过期缓冲区中移除并加入到正在处理的缓冲区中
 			rtnFrame = ProcessWindow.TimeOutFrameWindowCache
@@ -60,6 +62,7 @@ public class ProcessWindow implements Runnable {
 			
 		} else if (DeathFrameWindowCache
 				.containsKey(GetKeyFromMsgBean(msgBean))) {
+			SPSDebugHelper.Speaker("如果事务已经死亡，就直接可以返回null", 3);
 			//如果事务已经死亡，就直接可以返回null
 		} else {
 			// 创建新的ProcessFrame 并且将其存入正在处理事务窗口，和事务号映射窗口

@@ -17,10 +17,10 @@ public class FastPaxosWorker implements Runnable {
 		for(;;){
 			MsgBean receivedMsg = MsgAsile.getReceivedBean();
 			OrderBase orderObj = null;
+			String feedBack = null;
 			/*
 			 * TODO 这里需要插入步骤，如果可以在窗口中查找到正在进行的事件，则直接接着进行处理
 			 * 否则，创建事件，并进行处理，处理完毕后更新事件状态，放入窗口
-			 * change point 1 start
 			 */
 			InProcessFrame frame = null;
 			if((frame = ProcessWindow.getInProcessFrame(receivedMsg)) != null){
@@ -31,11 +31,11 @@ public class FastPaxosWorker implements Runnable {
 				String IName = InstructionFlowTypeMapper.getInstructionNameByCode(frame.TrasanctionCode);
 				// 获得流程对象
 				orderObj = ProcessClassSwitcher.getInstructionByName(IName);
+				feedBack = orderObj.ProcessMsg(frame,receivedMsg);
 			}
-			/*
-			 * change point 1 end
-			 */
-			String feedBack = orderObj.ProcessMsg(frame,receivedMsg);
+			if(frame == null){
+				SPSDebugHelper.Speaker("事务已经被处理过", 3);
+			}
 			
 			if(feedBack != null){
 				SPSDebugHelper.Speaker(feedBack, 1);

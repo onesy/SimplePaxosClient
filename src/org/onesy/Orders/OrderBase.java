@@ -14,6 +14,10 @@ public abstract class OrderBase {
 
 	public abstract String ProcessMsg(InProcessFrame frame,MsgBean msgBean);
 	
+	public abstract String GetMsgKey(MsgBean msgBean);
+	
+	public abstract String GetMsgVal(MsgBean msgBean);
+	
 	public static MsgBean ChangeToThisNode(MsgBean msgBean){
 		msgBean.isOrigin = "0";
 		

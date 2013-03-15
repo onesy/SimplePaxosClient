@@ -26,11 +26,11 @@ public class CfgCenter {
 	/**
 	 * publisher队列长度
 	 */
-	public static final int PUBLISHER_QUEUE_LEN = 500;
+	public static final int PUBLISHER_QUEUE_LEN = 500000;
 	/**
 	 * subscripter队列长度
 	 */
-	public static final int SUBSCRIPTER_QUEUE_LEN = 500;
+	public static final int SUBSCRIPTER_QUEUE_LEN = 500000;
 	/**
 	 * 分割符 \r\r\r
 	 */
