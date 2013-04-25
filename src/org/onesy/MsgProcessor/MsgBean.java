@@ -2,10 +2,10 @@ package org.onesy.MsgProcessor;
 
 import java.io.Serializable;
 
+import org.onesy.Beans.ClientBeans;
 import org.onesy.ConfigureProcess.CfgBean;
 import org.onesy.ConfigureProcess.CfgCenter;
 import org.onesy.NodesManage.NodeDictionary;
-import org.onesy.Util.SPSDebugHelper;
 
 public class MsgBean implements Serializable {
 
@@ -44,7 +44,25 @@ public class MsgBean implements Serializable {
 	 * 消息的内容，外层协议封装到此为止，更多需要封装的信息通过Msg正文进行再次封装
 	 */
 	public String Msg = null;
-
+	
+	/**
+	 * 是否是消息返回
+	 */
+	public boolean isRtn = false;
+	
+	/**
+	 * 消息返回的client的信息
+	 */
+	public ClientBeans clientInfo = null;
+	
+	/**
+	 * 
+	 * @param cfgBean
+	 * @param transactionSerialNo
+	 * @param voteSerialNo
+	 * @param msgkind
+	 * @param msg
+	 */
 	public MsgBean(CfgBean cfgBean, String transactionSerialNo,
 			long voteSerialNo, String msgkind, String msg) {
 		this.sign = cfgBean.host + "_" + cfgBean.port + "_"

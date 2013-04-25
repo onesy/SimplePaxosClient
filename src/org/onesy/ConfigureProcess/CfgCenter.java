@@ -41,6 +41,10 @@ public class CfgCenter {
 	 */
 	public static final String ConnectEND = "\r\r\rEND";
 	
+	public static final String EQUALSEPERATOR = "\r:\r";
+	
+	public static final String PAIRSEPERATOR = "\n:\n";
+	
 	/**
 	 * transactionNo,本届点处理事务的自增序列
 	 */

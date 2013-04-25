@@ -1,9 +1,12 @@
 package org.onesy.ConfigureProcess;
 
+import java.util.HashMap;
 import java.util.Properties;
 
 import org.onesy.NodesManage.NodeDictionary;
 import org.onesy.Util.SPSDebugHelper;
+
+import com.sun.xml.internal.bind.v2.model.core.ID;
 
 public class CfgBean {
 
@@ -38,6 +41,7 @@ public class CfgBean {
 	public String sign = null;
 
 	public long voteSeriNo = 0;
+	
 
 	private CfgBean(String host, String port, String pubchannel,
 			String subchannel, String db, String password, String timeout,
@@ -83,6 +87,39 @@ public class CfgBean {
 				properties.getProperty("pubport"),
 				properties.getProperty("subport"));
 	}
+	public static CfgBean getInstance(HashMap<String, String> cfginfo) {
+
+		if(cfginfo == null){
+			SPSDebugHelper.Speaker("hash 为空", 2);
+			return null ;
+		}
+		
+		if (!(cfginfo.containsKey("host") && cfginfo.containsKey("port")
+				&& cfginfo.containsKey("pubchannel")
+				&& cfginfo.containsKey("subchannel")
+				&& cfginfo.containsKey("db")
+				&& cfginfo.containsKey("password")
+				&& cfginfo.containsKey("timeout") && cfginfo
+					.containsKey("vote"))
+				&& cfginfo.containsKey("pubport")
+				&& cfginfo.containsKey("subport")) {
+//			System.err.println("配置文件错误");
+			SPSDebugHelper.Speaker("hash中缺少必备元素", 2);
+			return null;
+		}
+
+		return new CfgBean(cfginfo.get("host"),
+				cfginfo.get("port"),
+				cfginfo.get("pubchannel"),
+				cfginfo.get("subchannel"),
+				cfginfo.get("db"),
+				cfginfo.get("password"),
+				cfginfo.get("timeout"),
+				cfginfo.get("vote"),
+				cfginfo.get("pubport"),
+				cfginfo.get("subport"));
+	}
+	
 
 	/**
 	 * 重载的方法，用以分辨两个cfgbean是否是针对一个实体的

@@ -57,9 +57,15 @@ public class NIOSocketClient {
 					// 当前通道选择器产生连接已经准备就绪事件，并且客户端套接字
 					// 通道尚未连接到服务端套接字通道
 					if (key.isConnectable() && !sc.isConnected()) {
-						InetAddress addr = InetAddress
-								.getByName(responser.host);
-						SERVER_PORT = responser.SubPort;
+						InetAddress addr;
+						if (msgBean.isRtn) {
+							addr = InetAddress
+									.getByName(msgBean.clientInfo.host);
+							SERVER_PORT = msgBean.clientInfo.listenport;
+						} else {
+							addr = InetAddress.getByName(responser.host);
+							SERVER_PORT = responser.SubPort;
+						}
 						// 客户端套接字通道向服务端套接字通道发起非阻塞连接
 						Thread.sleep(5);
 						boolean success = sc.connect(new InetSocketAddress(
@@ -98,7 +104,7 @@ public class NIOSocketClient {
 			}
 		} catch (BindException e) {
 			// TODO: handle exception
-			
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -113,5 +119,4 @@ public class NIOSocketClient {
 			sel.close();
 		}
 	}
-
 }
