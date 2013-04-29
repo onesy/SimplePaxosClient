@@ -81,7 +81,7 @@ public class GetVOrder extends OrderBase {
 
 	public HashMap<String, String> getMsgInfo(String msg) {
 		HashMap<String, String> MsgInfo = new HashMap<String, String>();
-		String[] pairs = msg.split(CfgCenter.SEPERATOR);
+		String[] pairs = msg.split(CfgCenter.PAIRSEPERATOR);
 		for (String pair : pairs) {
 			MsgInfo.put(pair.split(CfgCenter.EQUALSEPERATOR)[0],
 					pair.split(CfgCenter.EQUALSEPERATOR)[1]);
