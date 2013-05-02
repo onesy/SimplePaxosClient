@@ -26,7 +26,7 @@ public class InstructionFlowTypeMapper {
 	 */
 	public static Integer getCodeByInstructionName(String IName){
 		if(InstructionFlowTypeMapper.InstructionName2Code.get(IName) == null){
-			System.err.println("the instruction Flow is not exist!");
+			System.err.println("instruction:" + IName + " the instruction Flow is not exist!");
 		}
 		return InstructionFlowTypeMapper.InstructionName2Code.get(IName);
 	}
