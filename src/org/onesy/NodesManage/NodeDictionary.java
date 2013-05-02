@@ -74,7 +74,7 @@ public class NodeDictionary {
 				count ++;
 			}
 		}
-		return count --;
+		return 0;
 	}
 	
 
