@@ -31,7 +31,10 @@ public class NodeDictionary {
 	}
 	
 	private static synchronized CfgBean GetCfgFromList(int positoin){
-		return NodesLinkedList.get(positoin);
+		if (positoin == 0) {
+			return NodesLinkedList.get(0);
+		}
+		return NodesLinkedList.get(positoin - 1);
 	}
 
 	/**
@@ -67,7 +70,7 @@ public class NodeDictionary {
 		} else {
 			for (CfgBean nodeInfoBean : NodesLinkedList) {
 				if (new BigInteger(CommonAlgorithm.Md5Al(nodeInfoBean.sign)).abs()
-						.compareTo(new BigInteger(CommonAlgorithm.Md5Al(value)).abs()) == 1) {
+						.compareTo(new BigInteger(CommonAlgorithm.Md5Al(value)).abs()) > 1) {
 					//找到插入点
 					return count;
 				}
