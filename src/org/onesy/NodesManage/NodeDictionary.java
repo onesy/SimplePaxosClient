@@ -31,7 +31,7 @@ public class NodeDictionary {
 	}
 	
 	private static synchronized CfgBean GetCfgFromList(int positoin){
-		return NodesLinkedList.get(positoin - 1);
+		return NodesLinkedList.get(positoin);
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class NodeDictionary {
 				count ++;
 			}
 		}
-		return count;
+		return count --;
 	}
 	
 
