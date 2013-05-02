@@ -65,16 +65,17 @@ public class NodeDictionary {
 	 */
 	private static int PositionFinder(String value) {
 		int count = 0;
-		if (NodesLinkedList.size() < 1) {
+		if (NodesLinkedList.size() == 1) {
 			return count;
 		} else {
 			for (CfgBean nodeInfoBean : NodesLinkedList) {
+				count ++;
 				if (new BigInteger(CommonAlgorithm.Md5Al(nodeInfoBean.sign)).abs()
 						.compareTo(new BigInteger(CommonAlgorithm.Md5Al(value)).abs()) > 1) {
 					//找到插入点
 					return count;
 				}
-				count ++;
+				
 			}
 		}
 		return 0;
