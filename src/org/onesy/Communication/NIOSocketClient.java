@@ -67,7 +67,6 @@ public class NIOSocketClient {
 							SERVER_PORT = responser.SubPort;
 						}
 						// 客户端套接字通道向服务端套接字通道发起非阻塞连接
-						System.err.println("发起链接：" + addr.getHostAddress());
 						Thread.sleep(5);
 						boolean success = sc.connect(new InetSocketAddress(
 								addr, SERVER_PORT));
@@ -105,7 +104,6 @@ public class NIOSocketClient {
 			}
 		} catch (BindException e) {
 			// TODO: handle exception
-			e.printStackTrace();
 
 		} catch (Exception e) {
 			// TODO: handle exception
