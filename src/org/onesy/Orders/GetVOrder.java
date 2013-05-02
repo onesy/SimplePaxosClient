@@ -12,7 +12,7 @@ import org.onesy.NodesManage.NodeDictionary;
 import org.onesy.Util.RedisOp;
 
 public class GetVOrder extends OrderBase {
-
+	
 	@Override
 	public String ProcessMsg(InProcessFrame frame, MsgBean msgBean) {
 		// TODO Auto-generated method stub
@@ -20,7 +20,8 @@ public class GetVOrder extends OrderBase {
 		HashMap<String, String> MsgInfo = this.getMsgInfo(msgBean.Msg);
 		// 查看key是否是这个节点的
 		if (CfgCenter.selfbean.sign.equals(NodeDictionary.GetResponser(MsgInfo
-				.get("key")).sign)) {
+				.get("key")).sign) || SINGLEDEBUG) {
+			System.err.println("本节点处理数据");
 			String value = null;
 			String content = null;
 			String clientHost = null;
@@ -36,7 +37,7 @@ public class GetVOrder extends OrderBase {
 					+ CfgCenter.PAIRSEPERATOR + "value"
 					+ CfgCenter.EQUALSEPERATOR + value
 					+ CfgCenter.PAIRSEPERATOR + "transactionNo"
-					+ CfgCenter.EQUALSEPERATOR + msgBean.TransactionSerialNo;
+					+ CfgCenter.EQUALSEPERATOR + MsgInfo.get("transactionNo");
 			// 根据消息的来源构造回发的内容
 			MsgBean rtnMsgBean = new MsgBean(
 					CfgCenter.selfbean.voteSeriNo + "",
@@ -49,6 +50,7 @@ public class GetVOrder extends OrderBase {
 			// 处理完成，清除缓冲区中的这个frame
 			ProcessWindow.FrameFinish(frame);
 		} else {
+			System.err.println("非本节点处理数据");
 			// 根据查找道的节点信息进行转发转发最好直接使用msgbean进行构造
 			CfgBean transBean = NodeDictionary.GetResponser(MsgInfo.get("key"));
 			synchronized (CfgCenter.TransanctionNo) {
@@ -56,6 +58,7 @@ public class GetVOrder extends OrderBase {
 				MsgAsile.addSendBean(super.ChangeToThisNode(msgBean));
 			}
 			// 通过窗口的方法消除frame
+			ProcessWindow.FrameFinish(frame);
 		}
 		return null;
 	}
@@ -80,8 +83,9 @@ public class GetVOrder extends OrderBase {
 		HashMap<String, String> MsgInfo = new HashMap<String, String>();
 		String[] pairs = msg.split(CfgCenter.PAIRSEPERATOR);
 		for (String pair : pairs) {
-			MsgInfo.put(pair.split(CfgCenter.EQUALSEPERATOR)[0],
-					pair.split(CfgCenter.EQUALSEPERATOR)[1]);
+			String key = new String(pair.split(CfgCenter.EQUALSEPERATOR)[0]);
+			String value = new String(pair.split(CfgCenter.EQUALSEPERATOR)[1]);
+			MsgInfo.put(key,value);
 		}
 
 		String[] Client_Info = MsgInfo.get("Client_Info").split("_");
