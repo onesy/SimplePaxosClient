@@ -24,6 +24,7 @@ public class MsgAsile {
 	
 	public static MsgBean getSendBean(){
 		try {
+			System.err.println("remove");
 			return sendAisle.take();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

@@ -67,6 +67,7 @@ public class NIOSocketClient {
 							SERVER_PORT = responser.SubPort;
 						}
 						// 客户端套接字通道向服务端套接字通道发起非阻塞连接
+						System.err.println("发起链接：" + addr.getHostAddress());
 						Thread.sleep(5);
 						boolean success = sc.connect(new InetSocketAddress(
 								addr, SERVER_PORT));
@@ -90,8 +91,7 @@ public class NIOSocketClient {
 						// 向套接字通道中写入数据
 						sc.write(ByteBuffer.wrap(new String(MsgBean
 								.DecodeToStr(msgBean)
-								+ CfgCenter.ConnectEND
-								+ "\r\r\rEND\r\r\r").getBytes()));
+								+ CfgCenter.ConnectEND).getBytes()));
 						/*
 						 * 下面被注释的这么一句话告诉了我们一个真谛，有话，一次性说完
 						 * sc.write(ByteBuffer.wrap(new
@@ -104,6 +104,7 @@ public class NIOSocketClient {
 			}
 		} catch (BindException e) {
 			// TODO: handle exception
+			e.printStackTrace();
 
 		} catch (Exception e) {
 			// TODO: handle exception
