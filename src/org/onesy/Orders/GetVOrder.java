@@ -1,9 +1,6 @@
 package org.onesy.Orders;
 
 import java.util.HashMap;
-
-import javax.swing.text.AbstractDocument.Content;
-
 import org.onesy.Beans.ClientBeans;
 import org.onesy.ConfigureProcess.CfgBean;
 import org.onesy.ConfigureProcess.CfgCenter;
@@ -23,7 +20,7 @@ public class GetVOrder extends OrderBase {
 		HashMap<String, String> MsgInfo = this.getMsgInfo(msgBean.Msg);
 		// 查看key是否是这个节点的
 		if (CfgCenter.selfbean.sign.equals(NodeDictionary.GetResponser(MsgInfo
-				.get("key")))) {
+				.get("key")).sign)) {
 			String value = null;
 			String content = null;
 			String clientHost = null;
