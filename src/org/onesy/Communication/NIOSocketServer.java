@@ -73,8 +73,9 @@ public class NIOSocketServer {
 						MsgAsile.addReceivedBean(MsgBean.getMsgBean(response));
 						// 重绕字节缓冲区，继续读取客户端套接字通道数据
 						ch.write((ByteBuffer) buffer.rewind());
-						if (response.indexOf(CfgCenter.ConnectEND) != -1)
+						if (response.indexOf(CfgCenter.ConnectEND) != -1){
 							ch.close();
+						}
 						buffer.clear();
 					}
 				}
