@@ -20,10 +20,8 @@ public class SetKVOrder extends OrderBase {
 		CfgBean cfgbean = NodeDictionary.GetResponser((String) kvContainer
 				.getKey());
 		// 如果本届点就是存储该数据的节点的话
-		System.err.println("target sign：" + cfgbean.sign + "---------->now get:" + CfgCenter.selfbean.sign);
-//		System.exit(0);
 		if (cfgbean.sign.equals(CfgCenter.selfbean.sign)
-				|| SINGLEDEBUG) {
+		/* || SPSDebugHelper.DEBUG */) {
 			// 设置值
 			this.SetKVToStore((String) kvContainer.getKey(),
 					(String) kvContainer.getValue(), CfgCenter.selfbean);
@@ -36,7 +34,7 @@ public class SetKVOrder extends OrderBase {
 				 */
 				MsgAsile.addSendBean(new MsgBean(CfgCenter.selfbean,
 						msgBean.TransactionSerialNo.toString(),
-						CfgCenter.selfbean.voteSeriNo, "Confirm",
+						CfgCenter.selfbean.voteSeriNo, "ConfirmOrder",
 						msgBean.Msg));
 			}
 			// 本次处理已经结束

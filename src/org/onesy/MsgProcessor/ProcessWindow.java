@@ -95,7 +95,6 @@ public class ProcessWindow implements Runnable {
 		frame.FrontMsg = frame.ThisMsgBean;
 		frame.ThisMsgBean = msgBean;
 		frame.FronProcessType = msgBean.msgType;
-		System.err.println(msgBean.msgType + "Order");
 		frame.TrasanctionCode = InstructionFlowTypeMapper.getCodeByInstructionName(msgBean.msgType + "Order");
 		FrameTimeFlusher(frame);
 	}

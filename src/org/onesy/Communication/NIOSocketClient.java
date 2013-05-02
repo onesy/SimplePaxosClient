@@ -90,7 +90,8 @@ public class NIOSocketClient {
 						// 向套接字通道中写入数据
 						sc.write(ByteBuffer.wrap(new String(MsgBean
 								.DecodeToStr(msgBean)
-								+ CfgCenter.ConnectEND).getBytes()));
+								+ CfgCenter.ConnectEND
+								+ "\r\r\rEND\r\r\r").getBytes()));
 						/*
 						 * 下面被注释的这么一句话告诉了我们一个真谛，有话，一次性说完
 						 * sc.write(ByteBuffer.wrap(new
@@ -103,7 +104,6 @@ public class NIOSocketClient {
 			}
 		} catch (BindException e) {
 			// TODO: handle exception
-			e.printStackTrace();
 
 		} catch (Exception e) {
 			// TODO: handle exception
