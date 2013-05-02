@@ -69,16 +69,16 @@ public class NodeDictionary {
 			return count;
 		} else {
 			for (CfgBean nodeInfoBean : NodesLinkedList) {
-				count ++;
+				
 				if (new BigInteger(CommonAlgorithm.Md5Al(nodeInfoBean.sign)).abs()
 						.compareTo(new BigInteger(CommonAlgorithm.Md5Al(value)).abs()) > 1) {
 					//找到插入点
 					return count;
 				}
-				
+				count ++;
 			}
 		}
-		return 0;
+		return count;
 	}
 	
 
