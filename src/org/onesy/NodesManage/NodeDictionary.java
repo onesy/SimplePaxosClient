@@ -120,16 +120,16 @@ public class NodeDictionary {
 			}
 			tmp.add(hMap.get(bigInteger));
 			albi.remove(bigInteger);
-			System.out.println(bigInteger);
+			//System.out.println(bigInteger);
 			if (albi.size() == 0) {
 				break;
 			}
 		}
-		for (CfgBean cfgBean:tmp) {
-			NodesLinkedList.add(cfgBean);
+		for (int i = 0 ; i < tmp.size(); i ++) {
+			NodesLinkedList.add(tmp.get(tmp.size() - i - 1));
 		}
 		for(CfgBean cfgb : NodesLinkedList){
-			System.out.println(cfgb.sign);
+			System.out.println(cfgb.sign + "====>" + new BigInteger(CommonAlgorithm.Md5Al(cfgb.sign)).abs());
 		}
 	}
 
