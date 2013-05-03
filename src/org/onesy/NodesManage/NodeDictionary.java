@@ -1,6 +1,7 @@
 package org.onesy.NodesManage;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -14,23 +15,26 @@ public class NodeDictionary {
 
 	public static LinkedList<CfgBean> NodesLinkedList = new LinkedList<CfgBean>();
 
-	public static void LoadNodes(){
-		for(CfgBean cb : CfgCenter.cfgBeansList){
-			PutCfgBean(cb.sign, cb);
+	public static void LoadNodes() {
+		for (CfgBean cb : CfgCenter.cfgBeansList) {
+			PutCfgBean(cb.sign, cb, CfgCenter.cfgBeansList);
 		}
 	}
-	
+
 	public static CfgBean GetCfgBean(String Key) {
 		return NodeDictionary.NodesDictionary.get(Key);
 	}
 
-	public static synchronized void PutCfgBean(String sign, CfgBean cfgBean) {
+	private static synchronized void PutCfgBean(String sign, CfgBean cfgBean,
+			ArrayList<CfgBean> cfgbeanlist) {
 		NodeDictionary.NodesDictionary.put(sign, cfgBean);
-		NodeDictionary.NodesLinkedList.add(PositionFinder(cfgBean.sign),
-				cfgBean);
+		// NodeDictionary.NodesLinkedList.add(PositionFinder(cfgBean.sign),
+		// cfgBean);
+		cfgSort(cfgbeanlist);
+
 	}
-	
-	private static synchronized CfgBean GetCfgFromList(int positoin){
+
+	private static synchronized CfgBean GetCfgFromList(int positoin) {
 		if (positoin == 0) {
 			return NodesLinkedList.get(0);
 		}
@@ -44,13 +48,16 @@ public class NodeDictionary {
 	 * @return CfgBean
 	 */
 	public static synchronized CfgBean GetRandomArbiter() {
-		int position =(int) Math.floor(Math.random() * NodesLinkedList.size() * 8)% NodesLinkedList.size();
+		int position = (int) Math.floor(Math.random() * NodesLinkedList.size()
+				* 8)
+				% NodesLinkedList.size();
 		return GetCfgFromList(position);
 	}
 
 	/**
-	 * 返回响应者信息
-	 * 选择响应者和消息内容有关和消息bean无关,仅仅在被请求保存或者读取的事后可以起到作用，其他情况下，尤其是已经开始的事务，不能使用该方法否则会出错
+	 * 返回响应者信息 选择响应者和消息内容有关和消息bean无关,仅仅在被请求保存或者读取的事后可以起到作用，其他情况下，尤其是已经开始的事务，
+	 * 不能使用该方法否则会出错
+	 * 
 	 * @param msgkey
 	 * @return
 	 */
@@ -60,6 +67,7 @@ public class NodeDictionary {
 
 	/**
 	 * 通过计算MD5找出值所归属的节点在链表中的位置
+	 * 
 	 * @param value
 	 * @return
 	 */
@@ -69,17 +77,46 @@ public class NodeDictionary {
 			return count;
 		} else {
 			for (CfgBean nodeInfoBean : NodesLinkedList) {
-				
-				if (new BigInteger(CommonAlgorithm.Md5Al(nodeInfoBean.sign)).abs()
-						.compareTo(new BigInteger(CommonAlgorithm.Md5Al(value)).abs()) > 1) {
-					//找到插入点
+
+				if (new BigInteger(CommonAlgorithm.Md5Al(nodeInfoBean.sign))
+						.abs().compareTo(
+								new BigInteger(CommonAlgorithm.Md5Al(value))
+										.abs()) > 1) {
+					// 找到插入点
 					return count;
 				}
-				count ++;
+				count++;
 			}
 		}
 		return count;
 	}
-	
+
+	private static void cfgSort(ArrayList<CfgBean> cfgbeanlist) {
+		ArrayList<BigInteger> albi = new ArrayList<BigInteger>();
+		HashMap<BigInteger, CfgBean> hMap = new HashMap<BigInteger, CfgBean>();
+		LinkedList<CfgBean> tmp = new LinkedList<CfgBean>();
+		
+		for (CfgBean cfgBean : cfgbeanlist) {
+			albi.add(new BigInteger(CommonAlgorithm.Md5Al(cfgBean.sign)).abs());
+			hMap.put(new BigInteger(CommonAlgorithm.Md5Al(cfgBean.sign)).abs(),
+					cfgBean);
+		}
+		for (;;) {
+			BigInteger bigInteger = new BigInteger("0");
+			for (int i = 0; i < albi.size(); i++) {
+				if (albi.get(i).compareTo(bigInteger) == 1) {
+					bigInteger = albi.get(i);
+				}
+			}
+			tmp.add(hMap.get(bigInteger));
+			albi.remove(bigInteger);
+			if(albi.size() == 0){
+				break;
+			}
+		}
+		for(int i = 0; i < tmp.size(); i ++){
+			NodesLinkedList.add(tmp.get(tmp.size() - i -1));
+		}
+	}
 
 }
