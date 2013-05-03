@@ -62,12 +62,15 @@ public class NodeDictionary {
 	 * @return
 	 */
 	public static synchronized CfgBean GetResponser(String msgkey) {
+//		System.err.println("第一个Nodelinked：" + new BigInteger(CommonAlgorithm.Md5Al(NodesLinkedList.get(0).sign))
+//		.abs());
 		for (CfgBean nodeInfoBean : NodesLinkedList) {
 			if (new BigInteger(CommonAlgorithm.Md5Al(nodeInfoBean.sign))
 					.abs()
 					.compareTo(
-							new BigInteger(CommonAlgorithm.Md5Al(msgkey)).abs()) > 1) {
+							new BigInteger(CommonAlgorithm.Md5Al(msgkey)).abs()) == 1) {
 				// 找到节点
+				System.err.println("选择的是：" + nodeInfoBean.sign + "=>" + msgkey + "=>" + new BigInteger(CommonAlgorithm.Md5Al(msgkey)).abs());
 				return nodeInfoBean;
 			}
 		}
