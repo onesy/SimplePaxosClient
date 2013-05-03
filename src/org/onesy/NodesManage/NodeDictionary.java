@@ -16,18 +16,18 @@ public class NodeDictionary {
 	public static LinkedList<CfgBean> NodesLinkedList = new LinkedList<CfgBean>();
 
 	public static void LoadNodes() {
-		for (CfgBean cb : CfgCenter.cfgBeansList) {
-			PutCfgBean(cb.sign, cb, CfgCenter.cfgBeansList);
-		}
+			PutCfgBean(CfgCenter.cfgBeansList);
 	}
 
 	public static CfgBean GetCfgBean(String Key) {
 		return NodeDictionary.NodesDictionary.get(Key);
 	}
 
-	private static synchronized void PutCfgBean(String sign, CfgBean cfgBean,
+	private static synchronized void PutCfgBean(
 			ArrayList<CfgBean> cfgbeanlist) {
-		NodeDictionary.NodesDictionary.put(sign, cfgBean);
+		for(CfgBean cfgbean : cfgbeanlist){
+			NodeDictionary.NodesDictionary.put(cfgbean.sign, cfgbean);
+		}
 		// NodeDictionary.NodesLinkedList.add(PositionFinder(cfgBean.sign),
 		// cfgBean);
 		cfgSort(cfgbeanlist);
@@ -120,12 +120,16 @@ public class NodeDictionary {
 			}
 			tmp.add(hMap.get(bigInteger));
 			albi.remove(bigInteger);
+			System.out.println(bigInteger);
 			if (albi.size() == 0) {
 				break;
 			}
 		}
 		for (int i = 0; i < tmp.size(); i++) {
 			NodesLinkedList.add(tmp.get(tmp.size() - i - 1));
+		}
+		for(CfgBean cfgb : NodesLinkedList){
+			System.out.println(cfgb.sign);
 		}
 	}
 
