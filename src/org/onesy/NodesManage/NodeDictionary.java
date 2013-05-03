@@ -62,7 +62,16 @@ public class NodeDictionary {
 	 * @return
 	 */
 	public static synchronized CfgBean GetResponser(String msgkey) {
-		return GetCfgFromList(PositionFinder(msgkey));
+		for (CfgBean nodeInfoBean : NodesLinkedList) {
+			if (new BigInteger(CommonAlgorithm.Md5Al(nodeInfoBean.sign))
+					.abs()
+					.compareTo(
+							new BigInteger(CommonAlgorithm.Md5Al(msgkey)).abs()) > 1) {
+				// 找到节点
+				return nodeInfoBean;
+			}
+		}
+		return NodesLinkedList.get(0);
 	}
 
 	/**
@@ -71,6 +80,7 @@ public class NodeDictionary {
 	 * @param value
 	 * @return
 	 */
+	@Deprecated
 	private static int PositionFinder(String value) {
 		int count = 0;
 		if (NodesLinkedList.size() == 1) {
@@ -95,7 +105,7 @@ public class NodeDictionary {
 		ArrayList<BigInteger> albi = new ArrayList<BigInteger>();
 		HashMap<BigInteger, CfgBean> hMap = new HashMap<BigInteger, CfgBean>();
 		LinkedList<CfgBean> tmp = new LinkedList<CfgBean>();
-		
+
 		for (CfgBean cfgBean : cfgbeanlist) {
 			albi.add(new BigInteger(CommonAlgorithm.Md5Al(cfgBean.sign)).abs());
 			hMap.put(new BigInteger(CommonAlgorithm.Md5Al(cfgBean.sign)).abs(),
@@ -110,12 +120,12 @@ public class NodeDictionary {
 			}
 			tmp.add(hMap.get(bigInteger));
 			albi.remove(bigInteger);
-			if(albi.size() == 0){
+			if (albi.size() == 0) {
 				break;
 			}
 		}
-		for(int i = 0; i < tmp.size(); i ++){
-			NodesLinkedList.add(tmp.get(tmp.size() - i -1));
+		for (int i = 0; i < tmp.size(); i++) {
+			NodesLinkedList.add(tmp.get(tmp.size() - i - 1));
 		}
 	}
 
