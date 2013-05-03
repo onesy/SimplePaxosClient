@@ -125,8 +125,8 @@ public class NodeDictionary {
 				break;
 			}
 		}
-		for (int i = 0; i < tmp.size(); i++) {
-			NodesLinkedList.add(tmp.get(tmp.size() - i - 1));
+		for (CfgBean cfgBean:tmp) {
+			NodesLinkedList.add(cfgBean);
 		}
 		for(CfgBean cfgb : NodesLinkedList){
 			System.out.println(cfgb.sign);
